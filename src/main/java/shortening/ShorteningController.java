@@ -16,10 +16,28 @@ public class ShorteningController
 
     private final AtomicLong index = new AtomicLong();
 
+    private final char[] encode =  {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private final int base = 62;
+
+    // return 7 character long code
     private String getCode(long idx)
     {
-        return "abcdefg";
-        // return 7 character long code
+        char[] code = {'0', '0', '0', '0','0', '0', '0'};
+
+        int lastIndex = 6;
+
+        while(idx > 0)
+        {
+            long remainder = idx % base;
+            code[lastIndex] = encode[(int)remainder];
+            idx /= base;
+            lastIndex--;            
+        }
+
+        return String.valueOf(code);
     }
 
     // TODO: restrict to post
@@ -37,8 +55,8 @@ public class ShorteningController
         {
             String code = getCode(index.incrementAndGet());    
             
-            CodeToUrl.put(url, code);
-            UrlToCode.put(code, url);
+            CodeToUrl.put(code, url);
+            UrlToCode.put(url, code);
 
             return new URLObject(code, url);
         }            
