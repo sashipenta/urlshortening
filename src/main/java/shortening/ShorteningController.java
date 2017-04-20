@@ -2,13 +2,14 @@
 
 package shortening;
 
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
-import java.util.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class ShorteningController
@@ -78,12 +79,12 @@ public class ShorteningController
     }
 
     @RequestMapping(value="/{code}", method=RequestMethod.GET)
-    public URLObject shortening2(@PathVariable String code)
+    public RedirectView shortening2(@PathVariable String code)
     {
         if(CodeToUrl.containsKey(code))
         {
             String url = CodeToUrl.get(code);
-            return new URLObject(code, url);
+            return new RedirectView(url);
         }
         else
         {
