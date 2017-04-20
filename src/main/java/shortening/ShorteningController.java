@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.*;
 
 @RestController
@@ -62,7 +63,7 @@ public class ShorteningController
     }
 
     @RequestMapping(value="/shortening", method=RequestMethod.GET)
-    public URLObject getShortening(@RequestParam(value="code") String code)
+    public URLObject shortening1(@RequestParam(value="code") String code)
     {
         if(CodeToUrl.containsKey(code))
         {
@@ -76,4 +77,18 @@ public class ShorteningController
         }            
     }
 
+    @RequestMapping(value="/{code}", method=RequestMethod.GET)
+    public URLObject shortening2(@PathVariable String code)
+    {
+        if(CodeToUrl.containsKey(code))
+        {
+            String url = CodeToUrl.get(code);
+            return new URLObject(code, url);
+        }
+        else
+        {
+            String error = String.format("%s code doesn't exist", code);
+            throw new IllegalArgumentException(error);
+        }            
+    }
 }
